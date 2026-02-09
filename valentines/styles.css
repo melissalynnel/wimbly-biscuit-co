@@ -328,7 +328,7 @@ body {
   }
 
   .roulette-widget {
-    transform: scale(0.6);
+    transform: scale(0.96);
     transform-origin: center;
     width: auto;
     padding: 10px 12px;

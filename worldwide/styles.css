@@ -286,6 +286,10 @@ body {
   line-height: 1.05;
 }
 
+.headline-line {
+  display: inline;
+}
+
 .headline-block {
   display: grid;
   gap: 2px;
@@ -356,6 +360,10 @@ body {
 }
 
 @media (max-width: 640px) {
+  .headline-line {
+    display: block;
+  }
+
   .headline {
     letter-spacing: 0.1em;
   }
