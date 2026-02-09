@@ -268,6 +268,50 @@ body {
   --tooltip-y: 4px;
 }
 
+.globe-snow {
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  color: #fff;
+  text-decoration: none;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  text-shadow:
+    0 0 6px rgba(255, 255, 255, 0.9),
+    0 0 14px rgba(120, 210, 255, 0.8);
+}
+
+.globe-snow::after {
+  content: "refridgerator";
+  position: absolute;
+  right: 34px;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  backdrop-filter: blur(10px);
+  animation: counterspin 18s linear infinite;
+}
+
+.globe-snow:hover::after,
+.globe-snow:focus-visible::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(-4px);
+}
+
 .globe-shine {
   position: absolute;
   inset: 8% 14% 45% 14%;
