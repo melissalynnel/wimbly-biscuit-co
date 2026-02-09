@@ -29,7 +29,6 @@ body {
   line-height: 1.4;
   overflow-x: hidden;
   text-transform: lowercase;
-  cursor: none;
 }
 
 .background {
@@ -76,34 +75,6 @@ body {
   animation-delay: var(--delay);
 }
 
-.cursor-layer {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 9999;
-}
-
-.cursor-dot,
-.cursor-trail {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #ffffff;
-  box-shadow:
-    0 0 6px rgba(255, 255, 255, 0.9),
-    0 0 12px rgba(255, 194, 236, 0.8),
-    0 0 18px rgba(255, 216, 107, 0.7);
-  transform: translate(-100px, -100px);
-  transition: transform 0.02s linear;
-}
-
-.cursor-trail {
-  width: 6px;
-  height: 6px;
-  opacity: 0.7;
-  filter: blur(0.2px);
-}
 .page {
   position: relative;
   z-index: 1;
@@ -312,15 +283,6 @@ body {
   }
 }
 
-@media (pointer: coarse) {
-  body {
-    cursor: auto;
-  }
-
-  .cursor-layer {
-    display: none;
-  }
-}
 
 @media (max-width: 600px) {
   .roulette {

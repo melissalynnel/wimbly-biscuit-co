@@ -17,20 +17,6 @@
   <body>
     <div class="background" aria-hidden="true"></div>
     <div class="sparkle-layer" aria-hidden="true"></div>
-    <div class="cursor-layer" aria-hidden="true">
-      <div class="cursor-dot" id="cursorDot"></div>
-      <span class="cursor-trail"></span>
-      <span class="cursor-trail"></span>
-      <span class="cursor-trail"></span>
-      <span class="cursor-trail"></span>
-      <span class="cursor-trail"></span>
-      <span class="cursor-trail"></span>
-      <span class="cursor-trail"></span>
-      <span class="cursor-trail"></span>
-      <span class="cursor-trail"></span>
-      <span class="cursor-trail"></span>
-      <span class="cursor-trail"></span>
-    </div>
 
     <main class="page">
       <h1 class="title">happy valentine's day</h1>
@@ -90,66 +76,20 @@
       const sparkleAudio = document.getElementById("sparkleAudio");
       const sparkleLayer = document.querySelector(".sparkle-layer");
 
-if (sparkleLayer) {
-  const sparkleCount = 120;
-  for (let i = 0; i < sparkleCount; i += 1) {
-    const sparkle = document.createElement("span");
-    sparkle.className = "sparkle";
-    sparkle.style.setProperty("--x", `${Math.random() * 100}%`);
-    sparkle.style.setProperty("--y", `${Math.random() * 100}%`);
-    sparkle.style.setProperty("--size", `${3 + Math.random() * 6}px`);
-    sparkle.style.setProperty("--delay", `${Math.random() * 4}s`);
-    sparkle.style.setProperty("--duration", `${3 + Math.random() * 5}s`);
-    sparkle.style.setProperty("--opacity", `${0.5 + Math.random() * 0.5}`);
-    sparkleLayer.appendChild(sparkle);
-  }
-}
-      const pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-      const cursorDot = document.getElementById("cursorDot");
-      const trails = Array.from(document.querySelectorAll(".cursor-trail"));
-
-      const handlePointerMove = (event) => {
-        pointer.x = event.clientX;
-        pointer.y = event.clientY;
-      };
-
-      const handleTouchMove = (event) => {
-        const touch = event.touches?.[0];
-        if (!touch) return;
-        pointer.x = touch.clientX;
-        pointer.y = touch.clientY;
-      };
-
-      window.addEventListener("pointermove", handlePointerMove);
-      window.addEventListener("touchstart", handleTouchMove, { passive: true });
-      window.addEventListener("touchmove", handleTouchMove, { passive: true });
-
-      const positions = Array.from({ length: trails.length + 1 }).map(() => ({
-        x: window.innerWidth / 2,
-        y: window.innerHeight / 2,
-      }));
-
-      const animateCursor = () => {
-        positions[0].x += (pointer.x - positions[0].x) * 0.22;
-        positions[0].y += (pointer.y - positions[0].y) * 0.22;
-
-        for (let i = 1; i < positions.length; i += 1) {
-          positions[i].x += (positions[i - 1].x - positions[i].x) * 0.2;
-          positions[i].y += (positions[i - 1].y - positions[i].y) * 0.2;
+      if (sparkleLayer) {
+        const sparkleCount = 40;
+        for (let i = 0; i < sparkleCount; i += 1) {
+          const sparkle = document.createElement("span");
+          sparkle.className = "sparkle";
+          sparkle.style.setProperty("--x", `${Math.random() * 100}%`);
+          sparkle.style.setProperty("--y", `${Math.random() * 100}%`);
+          sparkle.style.setProperty("--size", `${3 + Math.random() * 6}px`);
+          sparkle.style.setProperty("--delay", `${Math.random() * 4}s`);
+          sparkle.style.setProperty("--duration", `${4 + Math.random() * 6}s`);
+          sparkle.style.setProperty("--opacity", `${0.35 + Math.random() * 0.45}`);
+          sparkleLayer.appendChild(sparkle);
         }
-
-        if (cursorDot) {
-          cursorDot.style.transform = `translate(${positions[0].x}px, ${positions[0].y}px)`;
-        }
-
-        trails.forEach((trail, index) => {
-          trail.style.transform = `translate(${positions[index + 1].x}px, ${positions[index + 1].y}px)`;
-        });
-
-        requestAnimationFrame(animateCursor);
-      };
-
-      requestAnimationFrame(animateCursor);
+      }
 
       let spinning = false;
       let spinTimer = null;
