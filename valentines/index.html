@@ -16,6 +16,7 @@
   </head>
   <body>
     <div class="background" aria-hidden="true"></div>
+    <div class="sparkle-layer" aria-hidden="true"></div>
 
     <main class="page">
       <h1 class="title">happy valentine's day</h1>
@@ -60,6 +61,22 @@
       const button = document.querySelector(".push-button");
       const result = document.getElementById("rouletteResult");
       const sparkleAudio = document.getElementById("sparkleAudio");
+const sparkleLayer = document.querySelector(".sparkle-layer");
+
+if (sparkleLayer) {
+  const sparkleCount = 120;
+  for (let i = 0; i < sparkleCount; i += 1) {
+    const sparkle = document.createElement("span");
+    sparkle.className = "sparkle";
+    sparkle.style.setProperty("--x", `${Math.random() * 100}%`);
+    sparkle.style.setProperty("--y", `${Math.random() * 100}%`);
+    sparkle.style.setProperty("--size", `${3 + Math.random() * 6}px`);
+    sparkle.style.setProperty("--delay", `${Math.random() * 4}s`);
+    sparkle.style.setProperty("--duration", `${3 + Math.random() * 5}s`);
+    sparkle.style.setProperty("--opacity", `${0.5 + Math.random() * 0.5}`);
+    sparkleLayer.appendChild(sparkle);
+  }
+}
       let spinning = false;
       let spinTimer = null;
       let spinTimeout = null;
