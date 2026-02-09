@@ -271,8 +271,8 @@ body {
 .globe-snow {
   position: absolute;
   right: -6px;
-  top: 50%;
-  transform: translateY(calc(-50% - 6px));
+  top: calc(50% - 15px);
+  transform: translateY(-50%);
   font-size: 1.32rem;
   color: #fff;
   text-decoration: none;
@@ -286,7 +286,7 @@ body {
 }
 
 .globe-snow::after {
-  content: "refridgerator";
+  content: "refrigerator";
   position: absolute;
   top: -42px;
   left: 50%;
