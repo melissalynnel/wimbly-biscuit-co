@@ -192,6 +192,7 @@ body {
   gap: 8px;
   color: var(--white);
   text-align: center;
+  touch-action: manipulation;
 }
 
 .roulette-result {
@@ -330,7 +331,7 @@ body {
   .roulette-widget {
     transform: scale(0.96);
     transform-origin: center;
-    width: auto;
+    width: min(360px, 90vw);
     padding: 10px 12px;
   }
 }

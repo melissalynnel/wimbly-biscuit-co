@@ -368,6 +368,11 @@ body {
     letter-spacing: 0.1em;
   }
 
+  .slogan {
+    font-size: 0.85rem;
+    transform: translateY(15px);
+  }
+
   .footer {
     letter-spacing: 0.12em;
   }
