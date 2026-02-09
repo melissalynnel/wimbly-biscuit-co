@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>happy valentine's day from wimbly biscuit co.</title>
+    <meta name="description" content="wimbly valentine's day roulette." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://use.typekit.net/vyy0wuq.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="background" aria-hidden="true"></div>
+
+    <main class="page">
+      <h1 class="title">happy valentine's day</h1>
+
+      <button class="push-button" type="button">
+        <div class="neon-heart" aria-hidden="true">
+          <svg viewBox="0 0 64 58" role="presentation" aria-hidden="true">
+            <path
+              d="M32 54C19 42 6 31 6 20 6 12 12 6 20 6c5.5 0 10.4 3.2 12 8 1.6-4.8 6.5-8 12-8 8 0 14 6 14 14 0 11-13 22-26 34Z"
+            />
+          </svg>
+          <span class="push-text">push</span>
+        </div>
+      </button>
+
+      <section class="roulette" aria-live="polite">
+        <div class="roulette-widget">
+          <span class="roulette-result" id="rouletteResult">
+            someone wimblies you very much
+          </span>
+        </div>
+      </section>
+
+      <p class="footer">
+        absurdities provided by
+        <span>wimbly biscuit co.</span>
+      </p>
+    </main>
+
+    <audio id="sparkleAudio" preload="auto" src="fairy-sparkle.mp3"></audio>
+
+    <script>
+      const phrases = [
+        "we're soulmates and i'm fuckin sickofit",
+        "i've wimbled too close to the sun",
+        "will you be my wimbly",
+        "you're the wimbly to my heart",
+        "you're the wimbly of my life",
+        "i'd wimble with you forever",
+      ];
+
+      const button = document.querySelector(".push-button");
+      const result = document.getElementById("rouletteResult");
+      const sparkleAudio = document.getElementById("sparkleAudio");
+      let spinning = false;
+      let spinTimer = null;
+      let spinTimeout = null;
+
+      const spin = () => {
+        if (spinning) return;
+        spinning = true;
+        result.classList.remove("burst");
+        let index = 0;
+
+        if (spinTimer) clearInterval(spinTimer);
+        if (spinTimeout) clearTimeout(spinTimeout);
+
+        spinTimer = setInterval(() => {
+          result.textContent = phrases[index % phrases.length];
+          index += 1;
+        }, 90);
+
+        spinTimeout = setTimeout(() => {
+          clearInterval(spinTimer);
+          const pick = phrases[Math.floor(Math.random() * phrases.length)];
+          result.textContent = pick;
+          result.classList.add("burst");
+          spinning = false;
+          if (sparkleAudio) {
+            sparkleAudio.currentTime = 0;
+            sparkleAudio.play().catch(() => {});
+          }
+          setTimeout(() => result.classList.remove("burst"), 900);
+        }, 1200);
+      };
+
+      button.addEventListener("click", spin);
+      button.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          spin();
+        }
+      });
+
+      window.addEventListener("beforeunload", () => {
+        if (spinTimer) clearInterval(spinTimer);
+        if (spinTimeout) clearTimeout(spinTimeout);
+      });
+    </script>
+  </body>
+</html>

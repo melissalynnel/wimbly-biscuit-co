@@ -1,2 +1,7 @@
-# wimbly-biscuit-co
-there are two kinds of people: those who wimble, and those who do not
+# Wimbly Biscuit Co.
+
+Simple, mobile-first marketing site.
+
+## Run locally
+
+Open `index.html` in a browser.
