@@ -179,6 +179,19 @@ body {
   animation: sparkle-burst 0.9s ease-out;
 }
 
+.home-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: #fff;
+  text-shadow:
+    0 0 6px rgba(255, 255, 255, 0.9),
+    0 0 14px rgba(180, 140, 255, 0.6);
+  margin-top: 6px;
+}
+
 .footer {
   margin-top: 18px;
   font-size: 0.7rem;
