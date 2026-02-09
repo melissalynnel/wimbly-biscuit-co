@@ -17,6 +17,20 @@
   <body>
     <div class="background" aria-hidden="true"></div>
     <div class="sparkle-layer" aria-hidden="true"></div>
+    <div class="cursor-layer" aria-hidden="true">
+      <div class="cursor-dot" id="cursorDot"></div>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+    </div>
 
     <main class="page">
       <h1 class="title">happy valentine's day</h1>
@@ -40,12 +54,23 @@
         </div>
       </section>
 
-      <a class="home-link" href="../" aria-label="world wide wimbly home">🌐</a>
-
       <p class="footer">
         absurdities provided by
         <span>wimbly biscuit co.</span>
       </p>
+
+      <a
+        class="home-link"
+        href="https://melissalynnel.github.io/wimbly-biscuit-co/"
+        aria-label="world wide wimbly home"
+      >
+        <svg viewBox="0 0 64 64" role="img" aria-hidden="true">
+          <circle cx="32" cy="32" r="22" />
+          <ellipse cx="32" cy="32" rx="10" ry="22" />
+          <ellipse cx="32" cy="32" rx="18" ry="8" />
+          <path d="M10 32h44" />
+        </svg>
+      </a>
     </main>
 
     <audio id="sparkleAudio" preload="auto" src="fairy-sparkle.mp3"></audio>
@@ -63,7 +88,7 @@
       const button = document.querySelector(".push-button");
       const result = document.getElementById("rouletteResult");
       const sparkleAudio = document.getElementById("sparkleAudio");
-const sparkleLayer = document.querySelector(".sparkle-layer");
+      const sparkleLayer = document.querySelector(".sparkle-layer");
 
 if (sparkleLayer) {
   const sparkleCount = 120;
@@ -79,6 +104,53 @@ if (sparkleLayer) {
     sparkleLayer.appendChild(sparkle);
   }
 }
+      const pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      const cursorDot = document.getElementById("cursorDot");
+      const trails = Array.from(document.querySelectorAll(".cursor-trail"));
+
+      const handlePointerMove = (event) => {
+        pointer.x = event.clientX;
+        pointer.y = event.clientY;
+      };
+
+      const handleTouchMove = (event) => {
+        const touch = event.touches?.[0];
+        if (!touch) return;
+        pointer.x = touch.clientX;
+        pointer.y = touch.clientY;
+      };
+
+      window.addEventListener("pointermove", handlePointerMove);
+      window.addEventListener("touchstart", handleTouchMove, { passive: true });
+      window.addEventListener("touchmove", handleTouchMove, { passive: true });
+
+      const positions = Array.from({ length: trails.length + 1 }).map(() => ({
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+      }));
+
+      const animateCursor = () => {
+        positions[0].x += (pointer.x - positions[0].x) * 0.22;
+        positions[0].y += (pointer.y - positions[0].y) * 0.22;
+
+        for (let i = 1; i < positions.length; i += 1) {
+          positions[i].x += (positions[i - 1].x - positions[i].x) * 0.2;
+          positions[i].y += (positions[i - 1].y - positions[i].y) * 0.2;
+        }
+
+        if (cursorDot) {
+          cursorDot.style.transform = `translate(${positions[0].x}px, ${positions[0].y}px)`;
+        }
+
+        trails.forEach((trail, index) => {
+          trail.style.transform = `translate(${positions[index + 1].x}px, ${positions[index + 1].y}px)`;
+        });
+
+        requestAnimationFrame(animateCursor);
+      };
+
+      requestAnimationFrame(animateCursor);
+
       let spinning = false;
       let spinTimer = null;
       let spinTimeout = null;

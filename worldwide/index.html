@@ -19,6 +19,20 @@
       <div class="nebula"></div>
       <div class="stars" id="stars"></div>
     </div>
+    <div class="cursor-layer" aria-hidden="true">
+      <div class="cursor-dot" id="cursorDot"></div>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+      <span class="cursor-trail"></span>
+    </div>
 
     <main class="scene">
       <div class="globe-wrap">
@@ -26,8 +40,12 @@
           <div class="globe-core"></div>
           <div class="globe-orbit">
             <div class="globe-ring"></div>
-            <a class="globe-heart" href="../valentines/" aria-label="wimbly valentines">
-              ❤
+            <a
+              class="globe-heart"
+              href="https://melissalynnel.github.io/wimbly-biscuit-co/valentines/"
+              aria-label="wimbly valentines"
+            >
+              &#9829;&#65038;
             </a>
             <a
               class="globe-artist"
@@ -65,6 +83,53 @@
         }
       }
 
+      const pointer = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      const cursorDot = document.getElementById("cursorDot");
+      const trails = Array.from(document.querySelectorAll(".cursor-trail"));
+
+      const handlePointerMove = (event) => {
+        pointer.x = event.clientX;
+        pointer.y = event.clientY;
+      };
+
+      const handleTouchMove = (event) => {
+        const touch = event.touches?.[0];
+        if (!touch) return;
+        pointer.x = touch.clientX;
+        pointer.y = touch.clientY;
+      };
+
+      window.addEventListener("pointermove", handlePointerMove);
+      window.addEventListener("touchstart", handleTouchMove, { passive: true });
+      window.addEventListener("touchmove", handleTouchMove, { passive: true });
+
+      const positions = Array.from({ length: trails.length + 1 }).map(() => ({
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+      }));
+
+      const animateCursor = () => {
+        positions[0].x += (pointer.x - positions[0].x) * 0.22;
+        positions[0].y += (pointer.y - positions[0].y) * 0.22;
+
+        for (let i = 1; i < positions.length; i += 1) {
+          positions[i].x += (positions[i - 1].x - positions[i].x) * 0.2;
+          positions[i].y += (positions[i - 1].y - positions[i].y) * 0.2;
+        }
+
+        if (cursorDot) {
+          cursorDot.style.transform = `translate(${positions[0].x}px, ${positions[0].y}px)`;
+        }
+
+        trails.forEach((trail, index) => {
+          trail.style.transform = `translate(${positions[index + 1].x}px, ${positions[index + 1].y}px)`;
+        });
+
+        requestAnimationFrame(animateCursor);
+      };
+
+      requestAnimationFrame(animateCursor);
+
       let audioReady = false;
       let audioContext = null;
 
@@ -79,30 +144,44 @@
         master.gain.value = 0.0;
         master.connect(audioContext.destination);
 
+        const shimmer = audioContext.createGain();
+        shimmer.gain.value = 0.32;
+
         const pad = audioContext.createOscillator();
         pad.type = "sine";
-        pad.frequency.value = 88;
+        pad.frequency.value = 220;
 
         const pad2 = audioContext.createOscillator();
         pad2.type = "triangle";
-        pad2.frequency.value = 132;
+        pad2.frequency.value = 330;
+
+        const sparkleOsc = audioContext.createOscillator();
+        sparkleOsc.type = "sine";
+        sparkleOsc.frequency.value = 1760;
+
+        const sparkleGain = audioContext.createGain();
+        sparkleGain.gain.value = 0.0;
 
         const noise = audioContext.createBufferSource();
         const buffer = audioContext.createBuffer(1, audioContext.sampleRate * 2, audioContext.sampleRate);
         const data = buffer.getChannelData(0);
         for (let i = 0; i < data.length; i += 1) {
-          data[i] = (Math.random() * 2 - 1) * 0.25;
+          data[i] = (Math.random() * 2 - 1) * 0.12;
         }
         noise.buffer = buffer;
         noise.loop = true;
 
         const filter = audioContext.createBiquadFilter();
         filter.type = "lowpass";
-        filter.frequency.value = 240;
-        filter.Q.value = 0.6;
+        filter.frequency.value = 520;
+        filter.Q.value = 0.5;
+
+        const sparkleFilter = audioContext.createBiquadFilter();
+        sparkleFilter.type = "highpass";
+        sparkleFilter.frequency.value = 1800;
 
         const reverb = audioContext.createConvolver();
-        const impulse = audioContext.createBuffer(2, audioContext.sampleRate * 2.8, audioContext.sampleRate);
+        const impulse = audioContext.createBuffer(2, audioContext.sampleRate * 2.6, audioContext.sampleRate);
         for (let c = 0; c < impulse.numberOfChannels; c += 1) {
           const impulseData = impulse.getChannelData(c);
           for (let i = 0; i < impulseData.length; i += 1) {
@@ -113,26 +192,44 @@
 
         const lfo = audioContext.createOscillator();
         lfo.type = "sine";
-        lfo.frequency.value = 0.04;
+        lfo.frequency.value = 0.06;
 
         const lfoGain = audioContext.createGain();
-        lfoGain.gain.value = 80;
+        lfoGain.gain.value = 120;
 
         lfo.connect(lfoGain);
         lfoGain.connect(filter.frequency);
 
+        const sparkleLfo = audioContext.createOscillator();
+        sparkleLfo.type = "triangle";
+        sparkleLfo.frequency.value = 0.9;
+
+        const sparkleLfoGain = audioContext.createGain();
+        sparkleLfoGain.gain.value = 0.24;
+
+        sparkleLfo.connect(sparkleLfoGain);
+        sparkleLfoGain.connect(sparkleGain.gain);
+
         pad.connect(filter);
         pad2.connect(filter);
         noise.connect(filter);
+
+        sparkleOsc.connect(sparkleFilter);
+        sparkleFilter.connect(sparkleGain);
+        sparkleGain.connect(shimmer);
+
         filter.connect(reverb);
+        shimmer.connect(reverb);
         reverb.connect(master);
 
         pad.start(now);
         pad2.start(now + 0.05);
         noise.start(now + 0.1);
+        sparkleOsc.start(now + 0.1);
         lfo.start(now);
+        sparkleLfo.start(now + 0.1);
 
-        master.gain.linearRampToValueAtTime(0.28, now + 4);
+        master.gain.linearRampToValueAtTime(0.38, now + 4);
       };
 
       const globe = document.querySelector(".globe");
