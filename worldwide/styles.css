@@ -273,11 +273,11 @@ body {
   right: -6px;
   top: 50%;
   transform: translateY(calc(-50% - 6px));
-  font-size: 1.1rem;
+  font-size: 1.32rem;
   color: #fff;
   text-decoration: none;
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   display: grid;
   place-items: center;
   text-shadow:
