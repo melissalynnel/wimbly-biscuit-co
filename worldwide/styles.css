@@ -272,7 +272,7 @@ body {
   position: absolute;
   right: -6px;
   top: 50%;
-  transform: translateY(calc(-50% - 3px));
+  transform: translateY(calc(-50% - 6px));
   font-size: 1.1rem;
   color: #fff;
   text-decoration: none;
