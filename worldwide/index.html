@@ -58,8 +58,8 @@
             </a>
             <a
               class="globe-snow"
-              href="https://melissalynnel.github.io/wimbly-biscuit-co/refridgerator/"
-              aria-label="refridgerator"
+              href="https://melissalynnel.github.io/wimbly-biscuit-co/refrigerator/"
+              aria-label="refrigerator"
             >
               ❄
             </a>
@@ -142,6 +142,7 @@
 
       let audioReady = false;
       let audioContext = null;
+      let lastSparkle = 0;
 
       const startAmbient = async () => {
         if (audioReady) return;
@@ -242,6 +243,35 @@
         master.gain.linearRampToValueAtTime(0.076, now + 4);
       };
 
+      const playSparkle = () => {
+        if (!audioContext) return;
+        const now = audioContext.currentTime;
+        if (now - lastSparkle < 0.12) return;
+        lastSparkle = now;
+
+        const sparkleGain = audioContext.createGain();
+        sparkleGain.gain.value = 0.0;
+
+        const osc = audioContext.createOscillator();
+        osc.type = "sine";
+        osc.frequency.value = 1600 + Math.random() * 400;
+
+        const filter = audioContext.createBiquadFilter();
+        filter.type = "highpass";
+        filter.frequency.value = 1200;
+
+        osc.connect(filter);
+        filter.connect(sparkleGain);
+        sparkleGain.connect(audioContext.destination);
+
+        sparkleGain.gain.setValueAtTime(0.0, now);
+        sparkleGain.gain.linearRampToValueAtTime(0.12, now + 0.02);
+        sparkleGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+
+        osc.start(now);
+        osc.stop(now + 0.2);
+      };
+
       const globe = document.querySelector(".globe");
       globe?.addEventListener("click", startAmbient);
       globe?.addEventListener("keydown", (event) => {
@@ -252,6 +282,13 @@
       });
 
       window.addEventListener("pointerdown", startAmbient, { once: true });
+
+      document.querySelectorAll(".globe-heart, .globe-artist, .globe-snow").forEach((icon) => {
+        icon.addEventListener("pointerenter", () => {
+          if (!audioReady) startAmbient();
+          playSparkle();
+        });
+      });
     </script>
   </body>
 </html>
