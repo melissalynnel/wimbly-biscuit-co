@@ -1,0 +1,262 @@
+:root {
+  color-scheme: light;
+  --cream: #f7f0e6;
+  --sun: #f6c400;
+  --sun-deep: #e0aa00;
+  --sun-glow: #ffdd4b;
+  --mint: #8fb5ae;
+  --teal: #3e6e6a;
+  --deep: #1d2b2b;
+  --steel: #b4b8b9;
+  --chrome: #cfd4d6;
+  --shadow: rgba(20, 30, 30, 0.22);
+  --warm: #f1d6b4;
+  --accent: #e76f51;
+  --counter: #c8b08a;
+  --plant: #2f5a4f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  background: #0b6f69;
+  color: var(--deep);
+  overflow-x: hidden;
+}
+
+.page {
+  min-height: 100vh;
+}
+
+.fridge-scroll {
+  min-height: 0;
+  padding: 48px 8vw 24px;
+  display: grid;
+  gap: 12px;
+  justify-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.fridge-footer {
+  margin: 0;
+  font-family: "Futura", "Avenir Next", "Avenir", sans-serif;
+  font-size: clamp(0.85rem, 1.6vw, 1.1rem);
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: #e0aa00;
+  text-align: center;
+  margin-top: 0;
+  order: 3;
+}
+
+.fridge-header {
+  text-align: center;
+  max-width: 520px;
+  z-index: 1;
+  order: 1;
+}
+
+.home-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin-top: 0;
+  text-decoration: none;
+  order: 4;
+}
+
+.home-link svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter:
+    drop-shadow(0 0 6px rgba(255, 255, 255, 0.95))
+    drop-shadow(0 0 14px rgba(255, 255, 255, 0.8))
+    drop-shadow(0 0 22px rgba(255, 120, 30, 0.7));
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  margin: 0 0 12px;
+  color: var(--teal);
+}
+
+h1,
+h2 {
+  font-family: "Fraunces", serif;
+  margin: 0 0 12px;
+}
+
+h1 {
+  font-family: "adventures-unlimited", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  text-transform: lowercase;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  text-shadow:
+    0 0 4px rgba(255, 200, 150, 0.95),
+    0 0 16px rgba(255, 120, 30, 0.98),
+    0 0 36px rgba(255, 90, 0, 0.96),
+    0 0 60px rgba(255, 70, 0, 0.9),
+    0 0 90px rgba(255, 40, 0, 0.8);
+}
+
+.subtitle {
+  display: inline-block;
+  font-size: 0.7em;
+  letter-spacing: 0.03em;
+}
+
+h2 {
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.subhead {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.fridge-stack {
+  width: min(520px, 90vw);
+  margin: 0 auto;
+  border-radius: 40px;
+  background: linear-gradient(160deg, #ffd24a, #f1b300);
+  box-shadow: 0 34px 70px var(--shadow);
+  display: grid;
+  overflow: hidden;
+  border: 2px solid rgba(35, 56, 52, 0.18);
+  position: relative;
+  z-index: 1;
+  order: 2;
+}
+
+.fridge-stack::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 24%, rgba(0, 0, 0, 0.15) 100%);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.fridge-stack::after {
+  content: "";
+  position: absolute;
+  right: -10px;
+  top: 6%;
+  width: 22px;
+  height: 88%;
+  background: linear-gradient(180deg, rgba(60, 45, 10, 0.2), rgba(0, 0, 0, 0.05));
+  filter: blur(6px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.fridge-segment {
+  position: relative;
+  padding: 26px;
+  border-bottom: 2px solid rgba(55, 72, 69, 0.12);
+  display: grid;
+  gap: 18px;
+}
+
+.segment-top {
+  min-height: 360px;
+  background: linear-gradient(150deg, var(--sun-glow), var(--sun));
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.segment-door {
+  min-height: 534px;
+  background: linear-gradient(150deg, var(--sun), var(--sun-deep));
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.segment-top::after,
+.segment-door::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 40%);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.segment-door::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-top: 2px solid rgba(120, 90, 20, 0.2);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.segment-art {
+  background: linear-gradient(160deg, var(--sun), var(--sun-deep));
+}
+
+.segment-notes {
+  background: linear-gradient(160deg, var(--sun), var(--sun-deep));
+  border-bottom: none;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.75rem;
+  color: var(--teal);
+}
+
+.handle {
+  width: 20px;
+  height: 140px;
+  background: linear-gradient(180deg, #f8f9fa, #b9c3c4);
+  border-radius: 12px;
+  box-shadow:
+    inset 2px 0 4px rgba(255, 255, 255, 0.7),
+    2px 4px 8px rgba(20, 30, 30, 0.2);
+}
+
+.handle-vert {
+  justify-self: flex-start;
+}
+
+.segment-top .handle-vert {
+  height: 100px;
+  margin-top: 210px;
+}
+
+.segment-door .handle-vert {
+  height: 170px;
+  margin-top: 18px;
+  align-self: flex-start;
+}
+
+
+
+@media (max-width: 720px) {
+  h1 {
+    font-size: clamp(1.2rem, 3.8vw, 1.6rem);
+  }
+
+  .fridge-scroll {
+    justify-items: center;
+  }
+}
