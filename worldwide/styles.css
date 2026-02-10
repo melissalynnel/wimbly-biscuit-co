@@ -271,7 +271,7 @@ body {
 .globe-snow {
   position: absolute;
   right: -6px;
-  top: calc(50% - 15px);
+  top: calc(50% - 10px);
   transform: translateY(-50%);
   font-size: 1.32rem;
   color: #fff;
