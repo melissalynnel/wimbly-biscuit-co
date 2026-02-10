@@ -353,7 +353,7 @@ body {
   position: absolute;
   right: -6px;
   top: 50%;
-  transform: translateY(-50%) translateY(-12px);
+  transform: translateY(calc(-50% - 60px));
   font-size: 1.32rem;
   color: #fff;
   text-decoration: none;
