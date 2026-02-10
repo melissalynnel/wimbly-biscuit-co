@@ -18,7 +18,10 @@
     <main class="page">
       <section class="fridge-scroll" aria-labelledby="title">
         <header class="fridge-header">
-          <h1 id="title">wimbly biscuit co. is proud of you</h1>
+          <h1 id="title">
+            wimbly biscuit co. is proud of you<br />
+            <span class="subtitle">even if your parents aren't</span>
+          </h1>
         </header>
 
         <div class="fridge-stack" role="img" aria-label="a towering illustrated refrigerator">
@@ -44,115 +47,9 @@
           </svg>
         </a>
 
-        <div class="art-stage" id="artStage" aria-label="art workspace">
-          <input class="file-input" id="artInput" type="file" accept="image/*" />
-        </div>
-
         <p class="fridge-footer">absurdities provided by wimbly biscuit co.</p>
       </section>
     </main>
 
-    <script>
-      const artInput = document.getElementById("artInput");
-      const artStage = document.getElementById("artStage");
-
-      const storedArtKey = "wimbly-fridge-art";
-
-      const loadStoredArt = () => {
-        const raw = localStorage.getItem(storedArtKey);
-        if (!raw) return;
-        try {
-          const items = JSON.parse(raw);
-          items.forEach((item) => {
-            const img = createArtImage(item.src);
-            img.style.left = item.left;
-            img.style.top = item.top;
-            img.style.transform = item.transform;
-          });
-        } catch {
-          localStorage.removeItem(storedArtKey);
-        }
-      };
-
-      const saveArtPositions = () => {
-        const items = Array.from(artStage.querySelectorAll(".art-piece")).map((img) => ({
-          src: img.dataset.src,
-          left: img.style.left,
-          top: img.style.top,
-          transform: img.style.transform,
-        }));
-        localStorage.setItem(storedArtKey, JSON.stringify(items));
-      };
-
-      const createArtImage = (src) => {
-        const img = document.createElement("img");
-        img.src = src;
-        img.alt = "uploaded art";
-        img.className = "art-piece";
-        img.dataset.src = src;
-        img.style.left = "10%";
-        img.style.top = "20%";
-        img.style.transform = `rotate(${Math.random() * 6 - 3}deg)`;
-        artStage.appendChild(img);
-        makeDraggable(img);
-        return img;
-      };
-
-      const makeDraggable = (el) => {
-        let isDragging = false;
-        let startX = 0;
-        let startY = 0;
-        let originX = 0;
-        let originY = 0;
-
-        const onPointerDown = (event) => {
-          if (event.pointerType === "mouse" && event.button !== 0) return;
-          isDragging = true;
-          el.setPointerCapture(event.pointerId);
-          const rect = el.getBoundingClientRect();
-          startX = event.clientX;
-          startY = event.clientY;
-          originX = rect.left;
-          originY = rect.top;
-          el.classList.add("dragging");
-        };
-
-        const onPointerMove = (event) => {
-          if (!isDragging) return;
-          const stageRect = artStage.getBoundingClientRect();
-          const nextLeft = originX + (event.clientX - startX) - stageRect.left;
-          const nextTop = originY + (event.clientY - startY) - stageRect.top;
-          el.style.left = `${Math.max(0, Math.min(nextLeft, stageRect.width - el.offsetWidth))}px`;
-          el.style.top = `${Math.max(0, Math.min(nextTop, stageRect.height - el.offsetHeight))}px`;
-        };
-
-        const onPointerUp = (event) => {
-          if (!isDragging) return;
-          isDragging = false;
-          el.releasePointerCapture(event.pointerId);
-          el.classList.remove("dragging");
-          saveArtPositions();
-        };
-
-        el.addEventListener("pointerdown", onPointerDown);
-        el.addEventListener("pointermove", onPointerMove);
-        el.addEventListener("pointerup", onPointerUp);
-        el.addEventListener("pointercancel", onPointerUp);
-      };
-
-      artInput?.addEventListener("change", (event) => {
-        const file = event.target.files?.[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = () => {
-          createArtImage(reader.result);
-          saveArtPositions();
-        };
-        reader.readAsDataURL(file);
-        artInput.value = "";
-      });
-
-      loadStoredArt();
-    </script>
   </body>
 </html>
