@@ -8,10 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Space+Grotesk:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" />
     <link rel="stylesheet" href="https://use.typekit.net/vyy0wuq.css" />
     <link rel="stylesheet" href="styles.css?v=1" />
   </head>
@@ -20,25 +19,22 @@
       <section class="fridge-scroll" aria-labelledby="title">
         <header class="fridge-header">
           <h1 id="title">
-            wimbly biscuit co. is proud of you<br />
-            even if your parents aren't
+            wimbly biscuit co. is proud of you
           </h1>
         </header>
 
         <div class="fridge-stack" role="img" aria-label="a towering illustrated refrigerator">
           <div class="fridge-segment segment-top">
             <span class="handle handle-vert handle-top"></span>
-            <div class="sticky-note">
-              <p>
-                this is the endless scrolling fridge meant for the accomplishments of my friends.
-                i just made it yesterday, so give me some time to add some stuff.
-                best, melissa
-              </p>
+            <div class="fridge-intro-card">
+              <p>certificate fridge</p>
+              <p>each accomplishment gets its own official wimbly certificate.</p>
             </div>
           </div>
 
           <div class="fridge-segment segment-door">
             <span class="handle handle-vert handle-bottom"></span>
+            <div class="certificate-list" id="certificateList" aria-label="accomplishment certificates"></div>
           </div>
         </div>
 
@@ -62,5 +58,341 @@
         </p>
       </section>
     </main>
+    <script>
+      const accomplishments = [
+        // Add new accomplishments here. Order does not matter; cards render chronologically by year.
+        {
+          name: "Megan",
+          accomplishment: "getting a director level marketing job with a non-profit that helps children",
+          year: 2023
+        },
+        {
+          name: "[Redacted]",
+          accomplishment: "getting a divorce",
+          year: 2025
+        },
+        {
+          name: "Haley",
+          accomplishment: "going back to school",
+          year: 2025
+        },
+        {
+          name: "Waylon",
+          accomplishment: "moving to sf",
+          year: 2025
+        },
+        {
+          name: "Sammy + Lauren",
+          accomplishment: "moving to nyc",
+          year: 2025
+        },
+        {
+          name: "Gina",
+          accomplishment: "getting another dog",
+          year: 2025
+        },
+        {
+          name: "Vinny",
+          accomplishment: "everytime he went on a run instead of texting that one girl",
+          year: 2025
+        },
+        {
+          name: "Kim",
+          accomplishment: "getting back surgery",
+          year: 2025
+        },
+        {
+          name: "BK",
+          accomplishment: "recording his comedy special",
+          year: 2026
+        },
+        {
+          name: "Tim",
+          accomplishment: "running a marathon",
+          year: 2026
+        }
+      ];
+
+      const certificateList = document.getElementById("certificateList");
+      const sortedAccomplishments = [...accomplishments].sort((a, b) => {
+        if (a.year !== b.year) return a.year - b.year;
+        return a.name.localeCompare(b.name);
+      });
+
+      const roundedRectPath = (ctx, x, y, width, height, radius) => {
+        const r = Math.min(radius, width / 2, height / 2);
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + width - r, y);
+        ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+        ctx.lineTo(x + width, y + height - r);
+        ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+        ctx.lineTo(x + r, y + height);
+        ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+      };
+
+      const drawWrappedCenteredText = (ctx, text, x, startY, maxWidth, lineHeight) => {
+        const words = text.split(" ");
+        const lines = [];
+        let current = words[0] || "";
+
+        for (let i = 1; i < words.length; i += 1) {
+          const trial = `${current} ${words[i]}`;
+          if (ctx.measureText(trial).width <= maxWidth) {
+            current = trial;
+          } else {
+            lines.push(current);
+            current = words[i];
+          }
+        }
+        lines.push(current);
+
+        lines.forEach((line, index) => {
+          ctx.fillText(line, x, startY + index * lineHeight);
+        });
+
+        return startY + (lines.length - 1) * lineHeight;
+      };
+
+      const filenameFromEntry = (entry) => {
+        const cleanName = entry.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "friend";
+        return `wimbly-certificate-${cleanName}-${entry.year}.png`;
+      };
+
+      const downloadCertificatePng = (entry) => {
+        const width = 1400;
+        const height = 900;
+        const scale = 2;
+        const canvas = document.createElement("canvas");
+        canvas.width = width * scale;
+        canvas.height = height * scale;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+
+        ctx.scale(scale, scale);
+
+        const bgGradient = ctx.createLinearGradient(0, 0, width, height);
+        bgGradient.addColorStop(0, "#fffdf2");
+        bgGradient.addColorStop(1, "#ffe8ba");
+        ctx.fillStyle = bgGradient;
+        ctx.fillRect(0, 0, width, height);
+
+        roundedRectPath(ctx, 55, 55, width - 110, height - 110, 24);
+        ctx.fillStyle = "#fffaf0";
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(132, 88, 12, 0.35)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        roundedRectPath(ctx, 75, 75, width - 150, height - 150, 18);
+        ctx.setLineDash([10, 8]);
+        ctx.strokeStyle = "rgba(132, 88, 12, 0.58)";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        const cornerDots = [
+          [92, 92],
+          [width - 92, 92],
+          [92, height - 92],
+          [width - 92, height - 92]
+        ];
+        cornerDots.forEach(([x, y]) => {
+          ctx.beginPath();
+          ctx.arc(x, y, 7, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(169, 113, 17, 0.9)";
+          ctx.fill();
+        });
+
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#885a07";
+        ctx.font = "600 34px 'Space Grotesk', sans-serif";
+        ctx.fillText("wimbly biscuit co. recognizes and celebrates...", width / 2, 170);
+
+        ctx.fillStyle = "#5b3900";
+        ctx.font = "400 136px 'adventures-unlimited', sans-serif";
+        ctx.fillText(entry.name, width / 2, 340);
+        const nameWidth = ctx.measureText(entry.name).width;
+        ctx.strokeStyle = "#5b3900";
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(width / 2 - nameWidth / 2, 356);
+        ctx.lineTo(width / 2 + nameWidth / 2, 356);
+        ctx.stroke();
+
+        ctx.fillStyle = "#6c4605";
+        ctx.font = "500 48px 'Space Grotesk', sans-serif";
+        const bodyBottomY = drawWrappedCenteredText(
+          ctx,
+          `for accomplishing: ${entry.accomplishment}`,
+          width / 2,
+          470,
+          width - 260,
+          62
+        );
+
+        ctx.fillStyle = "#80560c";
+        ctx.font = "600 38px 'Space Grotesk', sans-serif";
+        ctx.fillText(`${entry.year}`, width / 2, bodyBottomY + 98);
+
+        ctx.fillStyle = "#6f4700";
+        ctx.font = "700 88px 'adventures-unlimited', sans-serif";
+        ctx.fillText("love, melissa", width / 2, height - 118);
+
+        const triggerDownload = (url) => {
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = filenameFromEntry(entry);
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        };
+
+        if (canvas.toBlob) {
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              triggerDownload(canvas.toDataURL("image/png"));
+              return;
+            }
+            const objectUrl = URL.createObjectURL(blob);
+            triggerDownload(objectUrl);
+            setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+          }, "image/png");
+        } else {
+          triggerDownload(canvas.toDataURL("image/png"));
+        }
+      };
+
+      const popConfettiAt = (x, y) => {
+        const burst = document.createElement("span");
+        burst.className = "confetti-burst";
+        const colors = ["#ff6f61", "#ffd166", "#06d6a0", "#4cc9f0", "#ff8fab", "#f7b801"];
+        const pieces = 16;
+
+        for (let i = 0; i < pieces; i += 1) {
+          const piece = document.createElement("span");
+          piece.className = "confetti-piece";
+          const angle = (Math.PI * 2 * i) / pieces + (Math.random() - 0.5) * 0.26;
+          const distance = 22 + Math.random() * 34;
+          piece.style.left = `${x}px`;
+          piece.style.top = `${y}px`;
+          piece.style.background = colors[i % colors.length];
+          piece.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+          piece.style.setProperty("--dy", `${Math.sin(angle) * distance - 12}px`);
+          piece.style.setProperty("--spin", `${(Math.random() - 0.5) * 420}deg`);
+          burst.appendChild(piece);
+        }
+
+        document.body.appendChild(burst);
+        setTimeout(() => burst.remove(), 700);
+      };
+
+      let hoverAudioContext = null;
+      let lastSparkle = 0;
+
+      const initHoverAudio = () => {
+        if (hoverAudioContext) return;
+        hoverAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+      };
+
+      const tryUnlockHoverAudio = () => {
+        initHoverAudio();
+        if (hoverAudioContext?.state === "suspended") {
+          hoverAudioContext.resume().catch(() => {});
+        }
+      };
+
+      const playHandleSparkle = () => {
+        if (!hoverAudioContext) return;
+        const now = hoverAudioContext.currentTime;
+        if (now - lastSparkle < 0.12) return;
+        lastSparkle = now;
+
+        const sparkleGain = hoverAudioContext.createGain();
+        sparkleGain.gain.value = 0.0;
+
+        const osc = hoverAudioContext.createOscillator();
+        osc.type = "sine";
+        osc.frequency.value = 1600 + Math.random() * 400;
+
+        const filter = hoverAudioContext.createBiquadFilter();
+        filter.type = "highpass";
+        filter.frequency.value = 1200;
+
+        osc.connect(filter);
+        filter.connect(sparkleGain);
+        sparkleGain.connect(hoverAudioContext.destination);
+
+        sparkleGain.gain.setValueAtTime(0.0, now);
+        sparkleGain.gain.linearRampToValueAtTime(0.12, now + 0.02);
+        sparkleGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.18);
+
+        osc.start(now);
+        osc.stop(now + 0.2);
+      };
+
+      const topHandle = document.querySelector(".handle-top");
+      topHandle?.addEventListener("pointerenter", () => {
+        tryUnlockHoverAudio();
+        playHandleSparkle();
+      });
+
+      window.addEventListener("pointerdown", tryUnlockHoverAudio, { once: true });
+      window.addEventListener("keydown", tryUnlockHoverAudio, { once: true });
+
+      sortedAccomplishments.forEach((entry, index) => {
+        const card = document.createElement("article");
+        card.className = "certificate-card";
+
+        const magnet = document.createElement("span");
+        magnet.className = "certificate-magnet";
+        magnet.classList.add(`certificate-magnet-${(index % 5) + 1}`);
+
+        const kicker = document.createElement("p");
+        kicker.className = "certificate-kicker";
+        kicker.textContent = "wimbly biscuit co. recognizes and celebrates...";
+
+        const name = document.createElement("h2");
+        name.className = "certificate-name";
+        name.textContent = entry.name;
+
+        const body = document.createElement("p");
+        body.className = "certificate-body";
+        body.textContent = `for accomplishing: ${entry.accomplishment}`;
+
+        const year = document.createElement("p");
+        year.className = "certificate-meta";
+        year.textContent = `${entry.year}`;
+
+        const signature = document.createElement("p");
+        signature.className = "certificate-signature";
+        signature.textContent = "love, melissa";
+
+        const downloadButton = document.createElement("button");
+        downloadButton.className = "certificate-download";
+        downloadButton.type = "button";
+        downloadButton.textContent = "↓";
+        downloadButton.setAttribute("aria-label", `download png for ${entry.name}`);
+        downloadButton.addEventListener("click", (event) => {
+          const target = event.currentTarget;
+          if (!(target instanceof HTMLElement)) {
+            downloadCertificatePng(entry);
+            return;
+          }
+          const rect = target.getBoundingClientRect();
+          const x = event.clientX || rect.left + rect.width / 2;
+          const y = event.clientY || rect.top + rect.height / 2;
+          popConfettiAt(x, y);
+          downloadCertificatePng(entry);
+        });
+
+        card.append(magnet, kicker, name, body, year, signature, downloadButton);
+        certificateList.appendChild(card);
+      });
+    </script>
   </body>
 </html>
