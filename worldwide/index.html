@@ -74,13 +74,13 @@
           <span class="headline-line">welcome to the </span>
           <span class="headline-line">world wide wimbly</span>
         </p>
-        <p class="slogan">making the internet fun again</p>
+        <p class="slogan">the internet should be fun</p>
       </div>
     </main>
     <div class="neon-broadcast" id="neonBroadcast" role="status" aria-live="polite">
       <div class="neon-track">
         <div class="neon-message">
-          hello, the wimbly public service announcements bring you this message: every good website should have several fun stims. thank you for tuning into this broadcast. - wimbly biscuit co.
+          wimbly biscuit co. brings you this message: every good website really should have several good stims. thank you for tuning into this message.
         </div>
       </div>
     </div>
@@ -255,6 +255,13 @@
         master.gain.linearRampToValueAtTime(0.076, now + 4);
       };
 
+      const tryStartAmbient = () => {
+        startAmbient();
+        if (audioContext?.state === "suspended") {
+          audioContext.resume().catch(() => {});
+        }
+      };
+
       const playSparkle = () => {
         if (!audioContext) return;
         const now = audioContext.currentTime;
@@ -285,15 +292,21 @@
       };
 
       const globe = document.querySelector(".globe");
-      globe?.addEventListener("click", startAmbient);
+      globe?.addEventListener("click", tryStartAmbient);
       globe?.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          startAmbient();
+          tryStartAmbient();
         }
       });
 
-      window.addEventListener("pointerdown", startAmbient, { once: true });
+      window.addEventListener("pointerdown", tryStartAmbient, { once: true });
+      window.addEventListener("load", tryStartAmbient, { once: true });
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) {
+          tryStartAmbient();
+        }
+      });
 
       document.querySelectorAll(".globe-heart, .globe-artist, .globe-snow").forEach((icon) => {
         icon.addEventListener("pointerenter", () => {
@@ -321,7 +334,7 @@
       const playIntro = () => {
         if (!introSound || introPlayed) return;
         introPlayed = true;
-        introSound.volume = 0.7;
+        introSound.volume = 0.42;
         introSound.play().catch(() => {
           introPlayed = false;
         });
@@ -329,6 +342,12 @@
 
       window.addEventListener("pointerdown", playIntro, { once: true });
       window.addEventListener("keydown", playIntro, { once: true });
+      window.addEventListener("load", playIntro, { once: true });
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) {
+          playIntro();
+        }
+      });
     </script>
   </body>
 </html>
