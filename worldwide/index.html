@@ -64,6 +64,15 @@
             >
               ❄
             </a>
+            <a
+              class="globe-buoy"
+              href="https://melissalynnel.github.io/swimming/"
+              aria-label="swimming"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <img src="assets/life-buoy.png" alt="" />
+            </a>
           </div>
           <div class="globe-grid"></div>
           <div class="globe-shine"></div>
@@ -308,7 +317,7 @@
         }
       });
 
-      document.querySelectorAll(".globe-heart, .globe-artist, .globe-snow").forEach((icon) => {
+      document.querySelectorAll(".globe-heart, .globe-artist, .globe-snow, .globe-buoy").forEach((icon) => {
         icon.addEventListener("pointerenter", () => {
           if (!audioReady) startAmbient();
           playSparkle();
@@ -321,7 +330,7 @@
       if (neonBroadcast) {
         setTimeout(() => {
           neonBroadcast.classList.add("neon-broadcast--visible");
-        }, 3000);
+        }, 900);
       }
 
       neonMessage?.addEventListener("animationend", () => {
