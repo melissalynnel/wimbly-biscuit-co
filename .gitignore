@@ -4,5 +4,5 @@ dist/
 swimming-repo/
 swimming/node_modules/
 swimming/dist/
-swimming-source/node_modules/
-swimming-source/dist/
+swimming/app/node_modules/
+swimming/app/dist/
