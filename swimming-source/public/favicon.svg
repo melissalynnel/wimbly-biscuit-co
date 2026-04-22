@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- outer rope ring -->
+  <circle cx="32" cy="32" r="30" fill="none" stroke="#c8b89a" stroke-width="3" stroke-dasharray="4 3"/>
+  <!-- main ring body (white/light grey) -->
+  <circle cx="32" cy="32" r="28" fill="#e8e0d4"/>
+  <!-- inner hole -->
+  <circle cx="32" cy="32" r="14" fill="#5ab8d4"/>
+  <!-- orange strap - top -->
+  <path d="M24 5 Q32 3 40 5 L38 18 Q32 16 26 18 Z" fill="#d4621a"/>
+  <!-- orange strap - bottom -->
+  <path d="M24 59 Q32 61 40 59 L38 46 Q32 48 26 46 Z" fill="#d4621a"/>
+  <!-- orange strap - left -->
+  <path d="M5 24 Q3 32 5 40 L18 38 Q16 32 18 26 Z" fill="#d4621a"/>
+  <!-- orange strap - right -->
+  <path d="M59 24 Q61 32 59 40 L46 38 Q48 32 46 26 Z" fill="#d4621a"/>
+  <!-- outer rope ring on top -->
+  <circle cx="32" cy="32" r="30" fill="none" stroke="#b8a882" stroke-width="2" stroke-dasharray="3.5 3" stroke-dashoffset="1.5" opacity="0.7"/>
+  <circle cx="32" cy="32" r="30" fill="none" stroke="#d4c8a8" stroke-width="1" stroke-dasharray="2 4.5" opacity="0.9"/>
+  <!-- inner ring edge -->
+  <circle cx="32" cy="32" r="14" fill="none" stroke="#b8a882" stroke-width="1.5" stroke-dasharray="3 2.5" opacity="0.5"/>
+</svg>
