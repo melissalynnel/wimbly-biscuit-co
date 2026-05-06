@@ -104,8 +104,10 @@ function resize() {
   H = Math.floor(wrapH / PIXEL_SCALE)
 
   // Keep sidewalk proportional: ~8.2% of smaller canvas dimension matches 25px on 1440px desktop
-  // Minimum 14 canvas-px (42 screen-px) so the control pills (≈34px tall) always fit with padding
-  EDGE = Math.max(14, Math.round(Math.min(W, H) * 0.082))
+  // On touch devices use a larger minimum (22 canvas-px = 66 screen-px) so the slider pill has
+  // comfortable breathing room below the browser URL bar and above the pool edge
+  const isMobile = window.matchMedia('(pointer: coarse)').matches
+  EDGE = Math.max(isMobile ? 22 : 14, Math.round(Math.min(W, H) * 0.082))
 
   bgCanvas.width   = W;  bgCanvas.height   = H
   fgCanvas.width   = W;  fgCanvas.height   = H

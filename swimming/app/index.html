@@ -19,8 +19,8 @@
       canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
       #bg, #fg { image-rendering: pixelated; image-rendering: crisp-edges; }
       @media (pointer: coarse) {
-        body { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 20px); }
-        #space-slider-wrap { margin-top: -7px; }
+        body { padding-bottom: env(safe-area-inset-bottom, 0px); }
+        #space-slider-wrap { margin-top: 3px; }
       }
     </style>
   </head>
