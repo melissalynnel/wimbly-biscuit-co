@@ -465,7 +465,7 @@ body {
 .headline {
   font-family: var(--font-title);
   font-size: clamp(2.2rem, 6vw, 3.6rem);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
   color: rgba(234, 247, 255, 0.95);
   text-shadow: 0 0 18px rgba(120, 210, 255, 0.65);
   line-height: 1.05;
