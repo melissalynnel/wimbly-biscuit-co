@@ -14,7 +14,8 @@ const textCtx = textCanvas.getContext('2d')!
 const fgCtx   = fgCanvas.getContext('2d')!
 
 const PIXEL_SCALE  = 3
-let   EDGE         = 25       // canvas pixels of sidewalk — computed proportionally in resize()
+let   EDGE_X       = 25       // canvas pixels of horizontal sidewalk — computed in resize()
+let   EDGE_Y       = 25       // canvas pixels of vertical sidewalk — computed in resize()
 const LINE_H       = 5        // canvas pixels per text lane
 const TEXT_PAD     = 5        // screen px padding inside pool edge
 const SCREEN_FONT  = '11px Inter, system-ui, -apple-system, sans-serif'
@@ -37,7 +38,7 @@ let lastTime      = 0
 // ─── geometry ────────────────────────────────────────────────────────────────
 
 function pool() {
-  return { l: EDGE, t: EDGE, r: W - EDGE, b: H - EDGE, w: W - EDGE * 2, h: H - EDGE * 2 }
+  return { l: EDGE_X, t: EDGE_Y, r: W - EDGE_X, b: H - EDGE_Y, w: W - EDGE_X * 2, h: H - EDGE_Y * 2 }
 }
 
 function visibleLines() {
@@ -46,7 +47,7 @@ function visibleLines() {
 
 
 
-function screenPoolW() { return (W - EDGE * 2) * PIXEL_SCALE - TEXT_PAD * 2 }
+function screenPoolW() { return (W - EDGE_X * 2) * PIXEL_SCALE - TEXT_PAD * 2 }
 
 // Swimmer position in canvas pixels (clamped to pool) — used for physics/repulsion
 function swimCanvasPos() {
@@ -107,7 +108,9 @@ function resize() {
   // On touch devices use a larger minimum (22 canvas-px = 66 screen-px) so the slider pill has
   // comfortable breathing room below the browser URL bar and above the pool edge
   const isMobile = window.matchMedia('(pointer: coarse)').matches
-  EDGE = Math.max(isMobile ? 22 : 14, Math.round(Math.min(W, H) * 0.082))
+  const proportionalEdge = Math.max(isMobile ? 22 : 14, Math.round(Math.min(W, H) * 0.082))
+  EDGE_X = isMobile ? Math.round(20 / PIXEL_SCALE) : proportionalEdge
+  EDGE_Y = proportionalEdge
 
   bgCanvas.width   = W;  bgCanvas.height   = H
   fgCanvas.width   = W;  fgCanvas.height   = H
@@ -116,9 +119,9 @@ function resize() {
 
   // Reposition slider — vertically centered in the top sidewalk
   const sliderWrap = document.getElementById('space-slider-wrap')
-  if (sliderWrap) sliderWrap.style.top = `${Math.round(EDGE * PIXEL_SCALE / 2)}px`
+  if (sliderWrap) sliderWrap.style.top = `${Math.round(EDGE_Y * PIXEL_SCALE / 2)}px`
   const creditWrap = document.getElementById('wimbly-credit')
-  if (creditWrap) creditWrap.style.bottom = `${Math.round(EDGE * PIXEL_SCALE / 2)}px`
+  if (creditWrap) creditWrap.style.bottom = `${Math.round(EDGE_Y * PIXEL_SCALE / 2)}px`
 
   layoutText()
   initFloatie()
@@ -139,8 +142,8 @@ function drawBorder() {
       }
   }
 
-  strip(0, 0, W, EDGE);           strip(0, H - EDGE, W, EDGE)
-  strip(0, EDGE, EDGE, H - EDGE * 2); strip(W - EDGE, EDGE, EDGE, H - EDGE * 2)
+  strip(0, 0, W, EDGE_Y);           strip(0, H - EDGE_Y, W, EDGE_Y)
+  strip(0, EDGE_Y, EDGE_X, H - EDGE_Y * 2); strip(W - EDGE_X, EDGE_Y, EDGE_X, H - EDGE_Y * 2)
 
   bgCtx.strokeStyle = 'rgba(190,120,175,0.4)'
   bgCtx.lineWidth = 0.5
@@ -219,7 +222,7 @@ function drawText(t: number) {
   const floatieSX = floatieX * PIXEL_SCALE
   const floatieSY = floatieY * PIXEL_SCALE
   const poolTop    = pool().t
-  const poolCenterX = EDGE * PIXEL_SCALE + (W - EDGE * 2) * PIXEL_SCALE / 2
+  const poolCenterX = EDGE_X * PIXEL_SCALE + (W - EDGE_X * 2) * PIXEL_SCALE / 2
 
   // Use a separate render row counter so blank lines never claim vertical space
   let row = 0
@@ -659,7 +662,7 @@ function setupSlider() {
   container.id = 'space-slider-wrap'
   container.style.cssText = `
     position: absolute;
-    top: ${Math.round(EDGE * PIXEL_SCALE / 2)}px;
+    top: ${Math.round(EDGE_Y * PIXEL_SCALE / 2)}px;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
@@ -740,7 +743,7 @@ function setupCredit() {
   container.id = 'wimbly-credit'
   container.style.cssText = `
     position: absolute;
-    bottom: ${Math.round(EDGE * PIXEL_SCALE / 2)}px;
+    bottom: ${Math.round(EDGE_Y * PIXEL_SCALE / 2)}px;
     left: 50%;
     transform: translate(-50%, 50%);
     display: flex;
